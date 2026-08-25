@@ -1,0 +1,58 @@
+/* Home institucional - protótipo isolado para o painel70 */
+body { background:#0b1219; }
+.sidebar { background:#101b25; }
+.topbar { background:#0d1720; }
+.nav-btn.active::before, .topbar-status .dot { box-shadow:none; }
+.home-shell { max-width:1480px; margin:0 auto; }
+.home-header {
+  display:flex; align-items:flex-end; justify-content:space-between; gap:24px;
+  padding:2px 0 20px; margin-bottom:20px; border-bottom:1px solid var(--panel-border);
+}
+.home-eyebrow {
+  margin-bottom:7px; color:var(--amber); font-size:10px; font-weight:600;
+  letter-spacing:.13em; text-transform:uppercase;
+}
+.home-heading { margin:0; font-family:var(--sans); font-size:28px; line-height:1.15; letter-spacing:-.02em; }
+.home-subtitle { margin:7px 0 0; max-width:720px; color:var(--muted); font-size:12.5px; line-height:1.55; }
+.home-period { min-width:190px; text-align:right; }
+.home-period strong { display:block; color:var(--text); font-size:14px; font-weight:600; }
+.home-period span { display:block; margin-top:4px; color:var(--muted); font-size:11px; }
+.home-section-head { display:flex; justify-content:space-between; align-items:end; gap:18px; margin:24px 0 11px; }
+.home-section-head h2 { margin:0; font-size:14px; font-weight:600; letter-spacing:.01em; }
+.home-section-head p { margin:0; color:var(--muted); font-size:11px; }
+.home-alert {
+  display:grid; grid-template-columns:4px 1fr auto; align-items:center; gap:16px;
+  margin-bottom:20px; padding:15px 16px; background:var(--panel); border:1px solid var(--panel-border);
+  border-radius:4px; cursor:pointer;
+}
+.home-alert-bar { align-self:stretch; background:var(--amber); border-radius:2px; }
+.home-alert-title { color:var(--text); font-size:13px; font-weight:600; }
+.home-alert-sub { margin-top:4px; color:var(--muted); font-size:11.5px; line-height:1.45; }
+.home-alert-action { color:var(--amber); font-size:11px; font-weight:600; white-space:nowrap; }
+.home-metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
+.home-metric {
+  min-height:132px; padding:15px 16px 14px; background:var(--panel);
+  border:1px solid var(--panel-border); border-top:3px solid var(--muted-dim); border-radius:4px;
+}
+.home-metric.is-good { border-top-color:var(--signal); }
+.home-metric.is-alert { border-top-color:var(--alert); }
+.home-metric.is-watch { border-top-color:var(--caution); }
+.home-metric-label { min-height:30px; color:var(--muted); font-size:10.5px; font-weight:600; line-height:1.35; text-transform:uppercase; letter-spacing:.055em; }
+.home-metric-value { margin-top:10px; color:var(--text); font-family:var(--sans); font-size:25px; font-weight:600; letter-spacing:-.025em; }
+.home-metric-meta { margin-top:5px; color:var(--muted); font-size:10.5px; }
+.home-metric-status { display:inline-block; margin-top:9px; font-size:10px; font-weight:600; }
+.home-metric.is-good .home-metric-status { color:var(--signal); }
+.home-metric.is-alert .home-metric-status { color:var(--alert); }
+.home-metric.is-watch .home-metric-status { color:var(--caution); }
+.home-note {
+  margin:12px 0 4px; padding:11px 13px; color:var(--muted); background:#0c1721;
+  border:1px solid var(--line); border-radius:4px; font-size:10.5px; line-height:1.5;
+}
+@media (max-width:1100px) { .home-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:700px) {
+  .home-header { align-items:flex-start; flex-direction:column; }
+  .home-period { text-align:left; }
+  .home-metrics { grid-template-columns:1fr; }
+  .home-alert { grid-template-columns:4px 1fr; }
+  .home-alert-action { grid-column:2; }
+}
