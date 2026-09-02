@@ -1,0 +1,304 @@
+/* ============================================================
+   home-nova.css — Home institucional do Painel 70º BPM
+   Reescrito em 2026-09 (correção pós-auditoria): antes usava uma paleta
+   isolada clara (--hn-bg claro, cartões brancos); agora reaproveita
+   DIRETAMENTE as variáveis do tema escuro já em uso no resto do painel
+   (:root do index.html — --bg-1, --panel, --panel-border, --text,
+   --muted, --amber, --signal, --alert, --caution, --sans, --mono,
+   --display), pra ficar visualmente igual ao painel de que já faz parte,
+   só que menos poluído. Nenhuma cor nova é criada aqui.
+
+   Regras de cor (Seção 6 do pedido):
+   - âmbar (--amber) só em item ativo, foco e seleção (slider, botão
+     "Até hoje" em hover/foco, indicador de pendência de dado);
+   - verde/amarelo/vermelho (--signal/--caution/--alert) só em texto de
+     variação, selo pequeno, símbolo ou barra lateral fina de 2px —
+     nunca pintando célula ou linha inteira.
+   ============================================================ */
+
+.home-nova {
+  font-family: var(--sans);
+  color: var(--text);
+}
+
+/* ---------- Cabeçalho compacto da Home ---------- */
+.hn-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--panel-border);
+  margin-bottom: 16px;
+}
+.hn-title {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.15;
+}
+.hn-title::before { content: '// '; color: var(--amber); }
+.hn-subtitle {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.hn-header-status { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.hn-updated { font-family: var(--mono); font-size: 10.5px; color: var(--muted); letter-spacing: 0.02em; }
+.hn-updated strong { color: var(--text); font-weight: 600; }
+
+/* ---------- Controles de período ---------- */
+.hn-controls {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 14px 18px;
+  margin-bottom: 14px;
+}
+.hn-control-group { display: flex; flex-direction: column; gap: 4px; }
+.hn-control-group label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted-dim);
+}
+.hn-control-group label strong { color: var(--amber); font-weight: 600; }
+.hn-day-group { min-width: 180px; }
+.hn-day-group input[type="range"] {
+  width: 100%; accent-color: var(--amber); height: 22px; cursor: pointer;
+}
+.hn-btn-hoje {
+  background: var(--bg-2); color: var(--text); border: 1px solid var(--panel-border);
+  border-radius: 3px; padding: 7px 14px; font-family: var(--sans); font-size: 12px;
+  font-weight: 500; cursor: pointer; transition: border-color .12s ease, color .12s ease;
+  height: fit-content;
+}
+.hn-btn-hoje:hover, .hn-btn-hoje:focus-visible { border-color: var(--amber); color: var(--amber); outline: none; }
+.hn-periodo-texto {
+  font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.02em;
+  padding-bottom: 7px;
+}
+
+/* ---------- Banner de status (carregando / erro na origem) ---------- */
+.hn-status-banner {
+  padding: 9px 14px; margin-bottom: 14px; border-radius: 3px;
+  border-left: 3px solid var(--muted-dim); background: var(--panel);
+  font-family: var(--mono); font-size: 11.5px; color: var(--muted); letter-spacing: 0.01em;
+}
+.hn-status-banner.hn-loading { border-left-color: var(--muted); }
+.hn-status-banner.hn-erro { border-left-color: var(--alert); color: var(--alert); background: rgba(230,72,79,0.06); }
+
+/* ---------- Quadros (mês / acumulado) ---------- */
+.hn-quadro { margin-bottom: 22px; }
+.hn-quadro-title {
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--text); font-weight: 600; margin-bottom: 8px; display: flex; align-items: baseline; gap: 10px;
+}
+.hn-quadro-sub { font-size: 10.5px; letter-spacing: 0.02em; text-transform: none; color: var(--muted); font-weight: 400; }
+
+.hn-table-wrap {
+  overflow: auto;
+  max-height: 62vh;
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+}
+table.hn-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  min-width: 1360px; /* 16 colunas (Município + 15 indicadores) — garante rolagem horizontal em vez de espremer */
+  font-variant-numeric: tabular-nums;
+}
+.hn-table thead th {
+  position: sticky; top: 0; z-index: 3;
+  background: #142236;
+  color: var(--muted);
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.04em; text-transform: uppercase;
+  text-align: center; padding: 9px 8px; border-bottom: 1px solid var(--panel-border);
+  white-space: nowrap; cursor: pointer; user-select: none;
+}
+.hn-table thead th:hover, .hn-table thead th:focus-visible {
+  color: var(--amber); outline: none; background: #182a42;
+}
+.hn-table thead th.hn-th-municipio { text-align: left; cursor: default; }
+.hn-th-municipio { position: sticky; left: 0; top: 0; z-index: 4; }
+.hn-th-pend { color: var(--caution); margin-left: 3px; font-weight: 700; cursor: help; }
+.hn-th-provisorio { color: var(--muted); margin-left: 3px; font-weight: 700; cursor: help; }
+
+.hn-table tbody td {
+  padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: center; vertical-align: top;
+}
+.hn-table tbody tr:nth-child(even) td { background: rgba(255,255,255,0.014); }
+.hn-table tbody tr:hover td { background: rgba(232,168,60,0.035); }
+td.hn-col-municipio {
+  position: sticky; left: 0; z-index: 2;
+  background: var(--panel);
+  text-align: left; font-family: var(--sans); font-size: 12.5px; color: var(--text);
+  border-right: 1px solid var(--panel-border); white-space: nowrap; font-weight: 500;
+}
+.hn-table tbody tr:nth-child(even) td.hn-col-municipio { background: #102030; }
+.hn-table tbody tr:hover td.hn-col-municipio { background: rgba(232,168,60,0.06); }
+
+/* TOTAL 70º BPM — ênfase moderada: borda superior mais forte, fundo um
+   tom mais escuro, negrito. Nunca uma célula/linha pintada de âmbar por
+   inteiro. NÃO usa position:sticky (bottom:0): com poucas linhas a
+   tabela costuma ser mais baixa que o .hn-table-wrap, e "sticky bottom"
+   nesse caso puxa a linha pra cima, sobrepondo a linha anterior — por
+   isso a linha TOTAL fica no fluxo normal, só que com destaque visual. */
+tr.hn-row-total td {
+  background: var(--bg-2);
+  border-top: 2px solid var(--amber-dim);
+  font-weight: 700;
+}
+tr.hn-row-total td.hn-col-municipio {
+  position: sticky; left: 0; z-index: 2;
+  background: var(--bg-2); color: var(--amber);
+}
+
+/* Coluna em destaque no hover/foco do cabeçalho */
+.hn-col-hover { background: rgba(232,168,60,0.05) !important; }
+
+/* ---------- Célula (resultado / meta / selo / tooltip) ---------- */
+.hn-cell {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 2px 3px; border-radius: 3px; outline: none;
+}
+.hn-cell:focus, .hn-cell:focus-visible { box-shadow: 0 0 0 1px var(--amber) inset; }
+.hn-cell-resultado { font-family: var(--mono); font-weight: 700; font-size: 14.5px; color: var(--text); }
+.hn-cell-meta { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+.hn-selo {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.02em;
+  padding: 1px 5px; border-radius: 3px; white-space: nowrap;
+}
+.hn-selo-verde { color: var(--signal); background: rgba(33,201,138,0.09); }
+.hn-selo-amarelo { color: var(--caution); background: rgba(212,194,42,0.09); }
+.hn-selo-vermelho { color: var(--alert); background: rgba(230,72,79,0.09); }
+.hn-selo-cinza { color: var(--muted); background: rgba(120,145,168,0.08); }
+
+/* Cobertura parcial: barra lateral fina, discreta — nunca célula inteira. */
+td.hn-cell-parcial .hn-cell { border-left: 2px solid var(--caution); padding-left: 6px; }
+
+/* Aguardando base (IDOB, quando a base bar/boate não existe na planilha) e
+   Sem base p/ cálculo (QOP=0 no IDOB / T=0 no ITVD): mesma linguagem visual
+   neutra do "sem dados", sem nenhuma cor de desempenho — nunca sugere um
+   resultado calculado nem um 0%/100% inventado. */
+td.hn-cell-aguardando .hn-cell-resultado,
+td.hn-cell-sembase .hn-cell-resultado { color: var(--muted); }
+
+/* IDOB provisório: resultado calculado fica visível, mas nunca ganha cor
+   de desempenho (verde/amarelo/vermelho) — mesmo tom neutro do texto,
+   com o selo cinza "A validar" ao lado (ver .hn-selo-cinza). */
+td.hn-cell-provisorio .hn-cell-resultado { color: var(--text); }
+td.hn-cell-provisorio { border-left: 2px solid var(--panel-border); padding-left: 6px; }
+
+/* Sem página de detalhamento (Visibilidade, Pol. Cid. Empresa): cabeçalho
+   sem cursor de clique, pra não sugerir uma rota que não existe. */
+.hn-table thead th:not([data-page]) { cursor: default; }
+.hn-table thead th:not([data-page]):hover,
+.hn-table thead th:not([data-page]):focus-visible { color: var(--muted); background: transparent; }
+
+.hn-sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* Tooltip acessível (hover + foco por teclado) */
+.hn-tooltip {
+  display: none;
+  position: absolute; left: 50%; top: 100%; transform: translateX(-50%);
+  margin-top: 6px; width: 230px; z-index: 40;
+  background: var(--panel); border: 1px solid var(--panel-border); border-radius: 4px;
+  padding: 9px 11px; box-shadow: 0 8px 18px rgba(0,0,0,0.4);
+  font-family: var(--sans); font-size: 11px; line-height: 1.55; color: var(--text);
+  text-align: left; font-weight: 400;
+}
+.hn-tooltip strong { color: var(--amber); font-weight: 600; }
+.hn-cell:hover .hn-tooltip,
+.hn-cell:focus .hn-tooltip,
+.hn-cell:focus-within .hn-tooltip { display: block; }
+
+/* ---------- Análises complementares (Seção 22) — bloco compacto, sem
+   cartão grande, sem resultado detalhado: só nome + descrição curta +
+   fonte em texto secundário, abrindo a página completa já existente. ---------- */
+.hn-compl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px;
+}
+.hn-compl-item {
+  display: flex; flex-direction: column; gap: 3px; text-align: left;
+  background: var(--panel); border: 1px solid var(--panel-border); border-radius: 4px;
+  padding: 10px 12px; cursor: pointer; font-family: var(--sans);
+  transition: border-color .12s ease, background .12s ease;
+}
+.hn-compl-item:hover, .hn-compl-item:focus-visible {
+  border-color: var(--amber); background: rgba(232,168,60,0.045); outline: none;
+}
+.hn-compl-label { font-size: 12.5px; font-weight: 600; color: var(--text); }
+.hn-compl-desc { font-size: 11px; line-height: 1.4; color: var(--muted); }
+.hn-compl-fonte { font-family: var(--mono); font-size: 9.5px; color: var(--muted-dim); margin-top: 2px; }
+
+/* ---------- Legenda ---------- */
+.hn-legenda {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px;
+  padding-top: 12px; margin-top: 4px; border-top: 1px solid var(--panel-border);
+  font-size: 11px; color: var(--muted);
+}
+.hn-legenda-item { display: flex; align-items: center; gap: 5px; }
+.hn-legenda-texto { color: var(--muted); max-width: 480px; }
+
+/* ---------- Pendências / observações ----------
+   CORREÇÃO 2026-09 (Seção 4): deixou de ser um card grande de alerta
+   sempre aberto — agora é uma linha discreta + link "Ver detalhes".
+   O conteúdo técnico completo só aparece quando o usuário pede
+   (painel recolhível, fechado por padrão). */
+.hn-pendencias { margin-top: 16px; padding-top: 10px; border-top: 1px solid var(--panel-border); }
+.hn-pendencias-resumo {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 10px;
+  font-size: 11.5px; color: var(--muted);
+}
+.hn-pendencias-resumo-texto { color: var(--muted); }
+.hn-pendencias-toggle {
+  font-family: inherit; font-size: 11px; color: var(--amber); background: none; border: none;
+  padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 2px;
+}
+.hn-pendencias-toggle:hover, .hn-pendencias-toggle:focus-visible { color: var(--amber-dim); outline: none; }
+.hn-pendencias-painel {
+  margin-top: 10px; padding: 12px 14px; background: var(--panel);
+  border-left: 3px solid var(--panel-border); border-radius: 0 4px 4px 0;
+}
+.hn-pendencias-title {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 8px;
+}
+.hn-pendencias-painel ul { margin: 0; padding-left: 18px; }
+.hn-pendencias-painel li { font-size: 12px; line-height: 1.55; color: var(--text); margin-bottom: 6px; }
+.hn-pendencias-painel li:last-child { margin-bottom: 0; }
+.hn-alerta-anomalia { color: var(--caution); }
+.hn-fonte-rodape { margin-top: 8px; font-size: 10.5px; color: var(--muted); }
+.hn-fonte-rodape a { color: var(--amber); text-decoration: none; }
+.hn-fonte-rodape a:hover { text-decoration: underline; }
+
+/* ---------- Responsividade ---------- */
+@media (max-width: 1100px) {
+  .hn-controls { gap: 10px 14px; }
+  .hn-header { align-items: flex-start; }
+}
+@media (max-width: 700px) {
+  .hn-header { flex-direction: column; align-items: flex-start; }
+  .hn-header-status { align-items: flex-start; }
+  .hn-title { font-size: 17px; }
+  .hn-controls { gap: 10px 12px; }
+  .hn-btn-hoje { padding: 9px 16px; font-size: 13px; }
+  .hn-day-group input[type="range"] { height: 28px; }
+  .hn-table-wrap { max-height: 70vh; }
+  table.hn-table { min-width: 1120px; }
+  .hn-compl-grid { grid-template-columns: 1fr; }
+}

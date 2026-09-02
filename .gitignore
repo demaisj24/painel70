@@ -1,0 +1,10 @@
+# Higienização 2026-09 — itens de entrega/depuração que não devem
+# integrar o pacote publicado no GitHub Pages. Backups e patches são
+# entregues separadamente (fora deste repositório), não versionados aqui.
+claude/home_backup/
+screenshots/
+playwright-report/
+test-results/
+*.patch
+home-fontes.local.json
+.env

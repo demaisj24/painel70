@@ -6,6 +6,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Home institucional (design/home-institucional-v1): reaproveita as mesmas
+     variáveis do tema escuro (:root abaixo) e as mesmas fontes já carregadas
+     acima — nenhuma fonte ou paleta nova é introduzida. -->
+<link rel="stylesheet" href="home-nova.css">
 <style>
   :root {
     --bg-0: #070c14;
@@ -281,6 +285,7 @@
       <button class="nav-btn" data-page="vt">Visitas Tranq. Furto</button>
       <button class="nav-btn disabled" title="Mesmo indicador VT acima, versão completa: aguardando export próprio (A20.028 furto / A20.001 crimes violentos) pra virar série histórica com meta, igual aos indicadores da esquerda. Até lá, 'Visitas Tranq. Furto' continua sendo o snapshot de julho já disponível.">VT &middot; Série Completa (em construção)</button>
       <button class="nav-btn" data-page="mrpp">Manut. Rede Proteção</button>
+      <a class="nav-btn" style="text-decoration:none;box-sizing:border-box" href="https://app.powerbi.com/reportEmbed?reportId=43be4f60-8cd6-43a9-8380-347ae16d5198&amp;autoAuth=true&amp;ctid=7cab571e-a20e-4862-b5f6-173b96131f18" target="_blank" rel="noopener noreferrer" title="Abre em nova aba — não substitui o Painel 70, que continua aberto nesta aba">Interação Comunitária &#8599;</a>
     </div>
     <div class="nav-group">
       <div class="nav-group-label">Programas Sociais</div>
@@ -351,7 +356,7 @@ const DEFS = {
   cvpa: '<b>Naturezas CVPa (qtde de vítimas)</b><br><code>C01.157</code> Roubo &middot; <code>C01.158</code> Extorsão &middot; <code>C01.159</code> Extorsão mediante sequestro. Consumados e tentados, desde que não resultem em lesão fatal.',
   pog: '<b>Naturezas das operações de POG</b><br><code>Y04009</code> Operação Trânsito Seguro &middot; <code>Y07001</code> Batida Policial &middot; <code>Y07002</code> Operação Presença &middot; <code>Y07003</code> Incursão em Zona Quente de Criminalidade &middot; <code>Y07010</code> Divisas Seguras &middot; <code>Y10001</code> Cumprimento de Busca e Apreensão de Objetos, Pessoas e/ou Animais.',
   ppag: '<b>Naturezas do PPAG (policiamento de proximidade)</b><br><code>Y15001</code> Patrulha Escolar/Prevenção às Drogas &middot; <code>Y07012</code> Prevenção à Violência Doméstica &middot; <code>Y15010</code> Ação/Operação em Zona Rural (na base atual do SiGOp esse tipo de operação é lançado como <code>Y07014</code>, a Metas26 ainda usa o nome legado Y15010) &middot; <code>Y15020</code> Ação/Operação em Área de Risco (sem indicador de meta definido ainda).',
-  idob: '<span class="formula">IDOB = [Qtde de Operações em Bares/Botecos &minus; Nº de Vítimas (MV + CVPe + CVPa) &times; 10] &divide; Qtde de Operações em Bares/Botecos &times; 100</span><span class="polarity">Polaridade: quanto maior (%), melhor</span><br>O multiplicador ×10 é intencional — o sistema é justamente pra inflar o peso das vítimas no indicador (confirmado por Eduardo em 2026-08-03). O guia oficial da DOP registra a fórmula sem esse peso, mas o painel usa a versão mais rígida de propósito.',
+  idob: '<span class="formula">IDOB = [Qtde de Operações em Bares/Botecos &minus; Nº de Vítimas (MV + CVPe + CVPa) &times; 10] &divide; Qtde de Operações em Bares/Botecos &times; 100</span><span class="polarity">Polaridade: quanto maior (%), melhor</span><br>O multiplicador ×10 é intencional — o sistema é justamente pra inflar o peso das vítimas no indicador (confirmado por Eduardo em 2026-08-03). O guia oficial da DOP registra a fórmula sem esse peso, mas o painel usa a versão mais rígida de propósito.<br>O IDOB não é calculado quando não existem Operações Boemia (QOP=0) no período, pois o denominador da fórmula é zero — nesse caso a célula mostra "Sem base para cálculo" (mesmo estado usado na Home), nunca 0% ou 100%.',
   cavaloaco: '<b>Operação Cavalo de Aço</b><br>Meta de operações (Ro): mesma régua do Visibilidade — 1 abordagem/destacamento, 2/pelotão, 4/companhia por mês. <b>Filtro de busca no Sistema REDS (confirmado por Eduardo em 2026-08-11)</b>: Natureza = Y01003 <b>E</b> Histórico contém "Cavalo de Aço" <b>E</b> Unidade Responsável pelo Registro = 70 BPM. Esse filtro é mais restrito que o usado até 2026-08-07 (que não exigia o Histórico) — os números caíram porque passou a considerar só as operações realmente registradas como Cavalo de Aço, não todo Y01003.<br>Motos Abordadas (A): extraído do indicador de produtividade "Qde de motocicletas fiscalizadas" registrado em cada RAT — como cada operação costuma abordar mais de uma moto, esse número é bem maior que o de operações.',
   rolezinho: '<b>Operação Rolezinho</b><br>Meta: 1 operação por semana, por município. <b>Filtro de busca no Sistema REDS (confirmado por Eduardo em 2026-08-04)</b>: Natureza = Y01003 <b>E</b> Histórico contém "ROLEZINHO" <b>E</b> Unidade Responsável pelo Registro = 70 BPM.<span class="polarity">Polaridade: quanto maior, melhor.</span><br><span class="neg">⚠ Atenção pra todas as frações: o registro só entra nesse indicador se a natureza da ocorrência for Y01003. Já foram identificados casos de operações de Rolezinho reais lançadas com outra natureza (ex: Y04999, Y07001) — esses não aparecem na busca oficial e o indicador fica subcontado. Ao lançar um Rolezinho, confirmar SEMPRE natureza Y01003 + "ROLEZINHO" no histórico.</span>',
   esforco_furto: '<span class="formula">DES% = Qtde de Prisões (autores de Furto) &divide; Qtde de REDS de Furto &times; 100</span><span class="polarity">Polaridade: quanto maior, melhor.</span><br>Fonte: <b>universo GERAL de furto</b> (natureza C01155, consumado+tentado, rural + urbano), export REDS/SiGOp, jan-ago/2026. Prisões extraídas do campo QTDE_PRISAO de cada ocorrência dessa mesma natureza.<br><b>Diferença importante em relação ao indicador Furto em Zona Rural</b> (que usa só a flag <code>IFZR</code>, subconjunto rural): checado por Eduardo em 2026-08-10 — a maior parte das prisões de autores de furto (65 de 75 no ano) acontece em furtos FORA da zona rural, então restringir esse indicador só ao universo rural subcontava o esforço real. Por isso o Esforço-Furto usa o universo geral de C01155, e o Furto em Zona Rural continua usando só IFZR — são denominadores propositalmente diferentes.',
@@ -1041,8 +1046,14 @@ function renderIDOBPage() {
   const mesesLocais = d.meses || MESES.slice(0, d.total_qtdeop_mes.length);
   let mi = mesesLocais.length - 1;
 
+  // HIGIENIZAÇÃO 2026-09 (item 1): QOP=0 é divisão por zero — deixa de
+  // retornar 0 (que se misturava visualmente com um "0% real de
+  // desempenho ruim") e passa a retornar null. cellIdob() abaixo
+  // renderiza esse null como "Sem base para cálculo", nunca 0%/100%,
+  // nunca cor de desempenho, nunca Infinity/NaN. Fórmula e dataset
+  // inalterados quando QOP>0.
   function calcIdob(qop, vit) {
-    if (!qop) return 0;
+    if (!qop) return null;
     return ((qop - vit*10) / qop) * 100;
   }
 
@@ -1066,18 +1077,23 @@ function renderIDOBPage() {
       };
     });
     const cell = (v) => `<td style="background:${idobColor(v)};color:${idobTextColor(v)};font-weight:600">${v.toFixed(1)}</td>`;
+    // null (QOP=0) renderiza "Sem base para cálculo", neutro, sem cor de
+    // desempenho — mesmo padrão já usado no ITVD (renderITVDPage).
+    const cellIdob = (v) => v === null
+      ? `<td style="background:rgba(120,145,168,0.12);color:#8fa3b8;font-weight:600" title="O IDOB não é calculado quando não há Operações Boemia (QOP=0) no período, pois o denominador da fórmula é zero.">Sem base para cálculo</td>`
+      : cell(v);
     list.forEach(x => {
       html += `<tr><td style="text-align:left">${x.nome}</td>
         <td>${x.qopMes}</td>
-        <td>${x.mvMes}</td>${cell(x.idobMvMes)}
-        <td>${x.cvpeMes}</td>${cell(x.idobCvpeMes)}
-        <td>${x.cvpaMes}</td>${cell(x.idobCvpaMes)}
-        ${cell(x.idobTotalMes)}
+        <td>${x.mvMes}</td>${cellIdob(x.idobMvMes)}
+        <td>${x.cvpeMes}</td>${cellIdob(x.idobCvpeMes)}
+        <td>${x.cvpaMes}</td>${cellIdob(x.idobCvpaMes)}
+        ${cellIdob(x.idobTotalMes)}
         <td>${x.qopAcum}</td>
-        <td>${x.mvAcum}</td>${cell(x.idobMvAcum)}
-        <td>${x.cvpeAcum}</td>${cell(x.idobCvpeAcum)}
-        <td>${x.cvpaAcum}</td>${cell(x.idobCvpaAcum)}
-        ${cell(x.idobTotalAcum)}
+        <td>${x.mvAcum}</td>${cellIdob(x.idobMvAcum)}
+        <td>${x.cvpeAcum}</td>${cellIdob(x.idobCvpeAcum)}
+        <td>${x.cvpaAcum}</td>${cellIdob(x.idobCvpaAcum)}
+        ${cellIdob(x.idobTotalAcum)}
       </tr>`;
     });
     const sum = k => list.reduce((s,x)=>s+x[k],0);
@@ -1086,15 +1102,15 @@ function renderIDOBPage() {
     const tMvAcum=sum('mvAcum'), tCvpeAcum=sum('cvpeAcum'), tCvpaAcum=sum('cvpaAcum');
     html += `<tr style="font-weight:700;background:rgba(255,255,255,0.08)"><td style="text-align:left">70º BPM</td>
       <td>${tQopMes}</td>
-      <td>${tMvMes}</td>${cell(calcIdob(tQopMes,tMvMes))}
-      <td>${tCvpeMes}</td>${cell(calcIdob(tQopMes,tCvpeMes))}
-      <td>${tCvpaMes}</td>${cell(calcIdob(tQopMes,tCvpaMes))}
-      ${cell(calcIdob(tQopMes, tCvpeMes+tCvpaMes))}
+      <td>${tMvMes}</td>${cellIdob(calcIdob(tQopMes,tMvMes))}
+      <td>${tCvpeMes}</td>${cellIdob(calcIdob(tQopMes,tCvpeMes))}
+      <td>${tCvpaMes}</td>${cellIdob(calcIdob(tQopMes,tCvpaMes))}
+      ${cellIdob(calcIdob(tQopMes, tMvMes+tCvpeMes+tCvpaMes))}
       <td>${tQopAcum}</td>
-      <td>${tMvAcum}</td>${cell(calcIdob(tQopAcum,tMvAcum))}
-      <td>${tCvpeAcum}</td>${cell(calcIdob(tQopAcum,tCvpeAcum))}
-      <td>${tCvpaAcum}</td>${cell(calcIdob(tQopAcum,tCvpaAcum))}
-      ${cell(calcIdob(tQopAcum, tCvpeAcum+tCvpaAcum))}
+      <td>${tMvAcum}</td>${cellIdob(calcIdob(tQopAcum,tMvAcum))}
+      <td>${tCvpeAcum}</td>${cellIdob(calcIdob(tQopAcum,tCvpeAcum))}
+      <td>${tCvpaAcum}</td>${cellIdob(calcIdob(tQopAcum,tCvpaAcum))}
+      ${cellIdob(calcIdob(tQopAcum, tMvAcum+tCvpeAcum+tCvpaAcum))}
     </tr>`;
     return html;
   }
@@ -1179,8 +1195,14 @@ function renderITVDPage() {
   const mesesLocais = d.meses || MESES.slice(0, d.total_trafico_mes.length);
   let mi = mesesLocais.length - 1;
 
+  // CORREÇÃO 2026-09 (Seção 3): T=0 é divisão por zero — não é mais
+  // tratado como 100% ("sem problema a resolver"). calcItvd agora
+  // retorna null nesse caso, e cellItvd renderiza o mesmo rótulo neutro
+  // "Sem base para cálculo" usado na Home (hn-selo-cinza), unificando o
+  // estado entre as duas telas. Correção de coerência do próprio
+  // indicador — não é um redesenho desta página.
   function calcItvd(t, v) {
-    if (!t) return 100;
+    if (!t) return null;
     return ((t - v*2) / t) * 100;
   }
 
@@ -1192,22 +1214,25 @@ function renderITVDPage() {
       tAcum: m.trafico_acum[mi], vAcum: m.vit_acum[mi], iAcum: calcItvd(m.trafico_acum[mi], m.vit_acum[mi]),
     }));
     const cell = (v) => `<td style="background:${idobColor(v)};color:${idobTextColor(v)};font-weight:600">${v.toFixed(1)}</td>`;
+    const cellItvd = (v) => v === null
+      ? `<td style="background:rgba(120,145,168,0.12);color:#8fa3b8;font-weight:600" title="O ITVD não é calculado quando não existem REDS de tráfico/uso no período, pois o denominador da fórmula é zero.">Sem base para cálculo</td>`
+      : cell(v);
     list.forEach(x => {
       html += `<tr><td style="text-align:left">${x.nome}</td>
-        <td>${x.tMes}</td><td>${x.vMes}</td>${cell(x.iMes)}
-        <td class="col-divider">${x.tAcum}</td><td>${x.vAcum}</td>${cell(x.iAcum)}
+        <td>${x.tMes}</td><td>${x.vMes}</td>${cellItvd(x.iMes)}
+        <td class="col-divider">${x.tAcum}</td><td>${x.vAcum}</td>${cellItvd(x.iAcum)}
       </tr>`;
     });
     const tTMes=d.total_trafico_mes[mi], tVMes=d.total_vit_mes[mi], tTAcum=d.total_trafico_acum[mi], tVAcum=d.total_vit_acum[mi];
     html += `<tr style="font-weight:700;background:rgba(255,255,255,0.08)"><td style="text-align:left">70º BPM</td>
-      <td>${tTMes}</td><td>${tVMes}</td>${cell(calcItvd(tTMes,tVMes))}
-      <td class="col-divider">${tTAcum}</td><td>${tVAcum}</td>${cell(calcItvd(tTAcum,tVAcum))}
+      <td>${tTMes}</td><td>${tVMes}</td>${cellItvd(calcItvd(tTMes,tVMes))}
+      <td class="col-divider">${tTAcum}</td><td>${tVAcum}</td>${cellItvd(calcItvd(tTAcum,tVAcum))}
     </tr>`;
     return html;
   }
 
   let html = `<div class="page-title">Indicador de Combate ao Tráfico e Violência Relacionada às Drogas (ITVD) em ${mesesLocais[mi]} de 2026</div>`;
-  html += `<div class="def-box"><span class="formula">ITVD = [Total de REDS Tráfico e Uso &minus; (REDS de MV + CVPe + CVPa) &times; 2] &divide; Total de REDS Tráfico e Uso &times; 100</span><span class="polarity">Polaridade: quanto maior (%), melhor &mdash; valores positivos indicam impacto preventivo, negativos mostram que houve mais crimes, exigindo ajuste no esforço policial. Sem REDS de Tráfico/Uso no período = 100% (sem problema a resolver, positivo).</span></div>`;
+  html += `<div class="def-box"><span class="formula">ITVD = [Total de REDS Tráfico e Uso &minus; (REDS de MV + CVPe + CVPa) &times; 2] &divide; Total de REDS Tráfico e Uso &times; 100</span><span class="polarity">Polaridade: quanto maior (%), melhor &mdash; valores positivos indicam impacto preventivo, negativos mostram que houve mais crimes, exigindo ajuste no esforço policial. O ITVD não é calculado quando não existem REDS de tráfico/uso no período, pois o denominador da fórmula é zero — nesse caso a célula mostra "Sem base para cálculo" (mesmo estado usado na Home), nunca 0% ou 100%.</span></div>`;
   html += `<select class="month-select" id="itvdMonthSel">`;
   mesesLocais.forEach((m,i) => html += `<option value="${i}" ${i===mi?'selected':''}>${m}</option>`);
   html += `</select>`;
@@ -3216,5 +3241,9 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
 
 goToPage('home');
 </script>
+<!-- Home institucional nova (design/home-institucional-v1): carregado depois do
+     script principal, só troca pages.home — nenhuma outra página é alterada.
+     Ver claude/arquitetura_decidida.md / relatório de entrega para detalhes. -->
+<script src="home-nova.js"></script>
 </body>
 </html>
